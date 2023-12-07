@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <nav>
+        <h3>NIGHT TRAP</h3>
+    </nav>
+
+    <h1 id="timer">0:00</h1>
+    <button id="toggle">Start</button>
+    <button id="reset">Reset</button>
+
+    <div id="eventStack"></div>
+    
+    
+    <script src="./js/stopwatch.js"></script>
+    <script src="./js/guideData.js"></script>
+    <script src="./js/eventRenderer.js"></script>
+    <script src="./js/EventManager.js"></script>    
+    <script>                
+        let timeElement = document.getElementById('timer');
+        let toggleBtn = document.getElementById('toggle');
+        let resetBtn = document.getElementById('reset');
+        let eventStack = document.getElementById('eventStack');
+        
+        let eventManager = new EventManager(guideData);
+        renderSyncMessage(eventStack);
+        
+        const watch = new Stopwatch((time) => {
+            timeElement.textContent = time;
+            eventManager.check(time, (newEvents) => {
+                renderCurrentEvents(eventStack, eventManager.currentEvents);
+            })           
+        });
+
+        
+        toggleBtn.addEventListener('click', () => {
+            if (watch.isOn) {
+                toggle.textContent = "Start"                
+                watch.stop();        
+            } else {
+                toggle.textContent = "Stop"
+                watch.start();
+                renderCurrentEvents(eventStack, eventManager.currentEvents);
+            }
+        });
+
+        resetBtn.addEventListener('click', () => {
+            if (!watch.isOn) {
+                watch.reset();
+                eventManager = new EventManager(guideData);
+                timer.textContent = "0:00";                
+                renderSyncMessage(eventStack);
+            }
+        });
+    </script>
+</body>
+</html>
